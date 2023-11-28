@@ -37,7 +37,7 @@ func (psg *Postgres) Execute(sql string) {
 	for rows.Next() {
 		columns := make([]string, len(cols))
 		columnPointers := make([]interface{}, len(cols))
-		for i, _ := range columns {
+		for i := range columns {
 			columnPointers[i] = &columns[i]
 		}
 
