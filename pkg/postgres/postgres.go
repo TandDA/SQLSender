@@ -25,15 +25,16 @@ func New() *Postgres {
 	return &postgres
 }
 
-func (psg *Postgres) Execute(sql string) {
+func (psg *Postgres) Execute(sql string) [][]string {
 	rows, err := psg.db.Query(sql)
 	if err != nil {
 		fmt.Print("Failed to execute sql:", err.Error())
 	}
 	defer rows.Close()
-
+	fmt.Println(sql)
 	cols, _ := rows.Columns()
-
+	result := make([][]string, 0)
+	result = append(result, cols)
 	for rows.Next() {
 		columns := make([]string, len(cols))
 		columnPointers := make([]interface{}, len(cols))
@@ -42,10 +43,7 @@ func (psg *Postgres) Execute(sql string) {
 		}
 
 		rows.Scan(columnPointers...)
-
-		for _, col := range columns {
-			fmt.Print(col + " ")
-		}
-		fmt.Println()
+		result = append(result, columns)
 	}
+	return result
 }
